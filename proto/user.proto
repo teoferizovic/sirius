@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+
+package proto;
+
+option go_package = "github.com/teo/sirius;sirius";
+
+service UserManagement {
+  rpc CreateNewUser (NewUser) returns (User) {}
+  rpc GetUsers (GetUserParam) returns (UserList) {}
+  rpc GetLastUser (GetUserParam) returns (User) {}
+  rpc SayHello (HelloMessage) returns (HelloMessage) {}
+  rpc SayHello2 (HelloMessage2) returns (HelloMessage2) {}			
+}
+
+message NewUser {
+  string name = 1;
+  int32 age = 2;
+}
+
+message User {
+  string name = 1;
+  int32 age = 2;
+  int32 id = 3; 
+}
+
+message GetUserParam {
+	
+}
+
+message UserList {
+	repeated User users = 1;
+}
+
+message HelloMessage {
+	string msg = 1;
+}
+
+message HelloMessage2 {
+	string msg = 1;
+	int32 number = 2;
+}
