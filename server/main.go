@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net"
 	"time"
@@ -16,19 +15,6 @@ import (
 const (
 	port = "5055"
 )
-
-type userService struct {
-	userpb.UnimplementedUserServiceServer
-}
-
-func (u *userService) GetUser(_ context.Context, req *userpb.GetUserRequest) (*userpb.GetUserResponse, error) {
-	return &userpb.GetUserResponse{
-		User: &userpb.User{
-			Uuid:     req.Uuid,
-			FullName: "Teo",
-		},
-	}, nil
-}
 
 func main() {
 
