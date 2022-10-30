@@ -18,230 +18,86 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// UserManagementClient is the client API for UserManagement service.
+// UserServiceClient is the client API for UserService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type UserManagementClient interface {
-	CreateNewUser(ctx context.Context, in *NewUser, opts ...grpc.CallOption) (*User, error)
-	GetUsers(ctx context.Context, in *GetUserParam, opts ...grpc.CallOption) (*UserList, error)
-	GetLastUser(ctx context.Context, in *GetUserParam, opts ...grpc.CallOption) (*User, error)
-	SayHello(ctx context.Context, in *HelloMessage, opts ...grpc.CallOption) (*HelloMessage, error)
-	SayHello2(ctx context.Context, in *HelloMessage2, opts ...grpc.CallOption) (*HelloMessage2, error)
+type UserServiceClient interface {
+	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
 }
 
-type userManagementClient struct {
+type userServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewUserManagementClient(cc grpc.ClientConnInterface) UserManagementClient {
-	return &userManagementClient{cc}
+func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
+	return &userServiceClient{cc}
 }
 
-func (c *userManagementClient) CreateNewUser(ctx context.Context, in *NewUser, opts ...grpc.CallOption) (*User, error) {
-	out := new(User)
-	err := c.cc.Invoke(ctx, "/proto.UserManagement/CreateNewUser", in, out, opts...)
+func (c *userServiceClient) GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error) {
+	out := new(GetUserResponse)
+	err := c.cc.Invoke(ctx, "/proto.UserService/GetUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userManagementClient) GetUsers(ctx context.Context, in *GetUserParam, opts ...grpc.CallOption) (*UserList, error) {
-	out := new(UserList)
-	err := c.cc.Invoke(ctx, "/proto.UserManagement/GetUsers", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userManagementClient) GetLastUser(ctx context.Context, in *GetUserParam, opts ...grpc.CallOption) (*User, error) {
-	out := new(User)
-	err := c.cc.Invoke(ctx, "/proto.UserManagement/GetLastUser", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userManagementClient) SayHello(ctx context.Context, in *HelloMessage, opts ...grpc.CallOption) (*HelloMessage, error) {
-	out := new(HelloMessage)
-	err := c.cc.Invoke(ctx, "/proto.UserManagement/SayHello", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userManagementClient) SayHello2(ctx context.Context, in *HelloMessage2, opts ...grpc.CallOption) (*HelloMessage2, error) {
-	out := new(HelloMessage2)
-	err := c.cc.Invoke(ctx, "/proto.UserManagement/SayHello2", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// UserManagementServer is the server API for UserManagement service.
-// All implementations must embed UnimplementedUserManagementServer
+// UserServiceServer is the server API for UserService service.
+// All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
-type UserManagementServer interface {
-	CreateNewUser(context.Context, *NewUser) (*User, error)
-	GetUsers(context.Context, *GetUserParam) (*UserList, error)
-	GetLastUser(context.Context, *GetUserParam) (*User, error)
-	SayHello(context.Context, *HelloMessage) (*HelloMessage, error)
-	SayHello2(context.Context, *HelloMessage2) (*HelloMessage2, error)
-	mustEmbedUnimplementedUserManagementServer()
+type UserServiceServer interface {
+	GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error)
+	mustEmbedUnimplementedUserServiceServer()
 }
 
-// UnimplementedUserManagementServer must be embedded to have forward compatible implementations.
-type UnimplementedUserManagementServer struct {
+// UnimplementedUserServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedUserServiceServer struct {
 }
 
-func (UnimplementedUserManagementServer) CreateNewUser(context.Context, *NewUser) (*User, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateNewUser not implemented")
+func (UnimplementedUserServiceServer) GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
-func (UnimplementedUserManagementServer) GetUsers(context.Context, *GetUserParam) (*UserList, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUsers not implemented")
-}
-func (UnimplementedUserManagementServer) GetLastUser(context.Context, *GetUserParam) (*User, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLastUser not implemented")
-}
-func (UnimplementedUserManagementServer) SayHello(context.Context, *HelloMessage) (*HelloMessage, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
-}
-func (UnimplementedUserManagementServer) SayHello2(context.Context, *HelloMessage2) (*HelloMessage2, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SayHello2 not implemented")
-}
-func (UnimplementedUserManagementServer) mustEmbedUnimplementedUserManagementServer() {}
+func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
-// UnsafeUserManagementServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to UserManagementServer will
+// UnsafeUserServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to UserServiceServer will
 // result in compilation errors.
-type UnsafeUserManagementServer interface {
-	mustEmbedUnimplementedUserManagementServer()
+type UnsafeUserServiceServer interface {
+	mustEmbedUnimplementedUserServiceServer()
 }
 
-func RegisterUserManagementServer(s grpc.ServiceRegistrar, srv UserManagementServer) {
-	s.RegisterService(&UserManagement_ServiceDesc, srv)
+func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
+	s.RegisterService(&UserService_ServiceDesc, srv)
 }
 
-func _UserManagement_CreateNewUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(NewUser)
+func _UserService_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserManagementServer).CreateNewUser(ctx, in)
+		return srv.(UserServiceServer).GetUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.UserManagement/CreateNewUser",
+		FullMethod: "/proto.UserService/GetUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserManagementServer).CreateNewUser(ctx, req.(*NewUser))
+		return srv.(UserServiceServer).GetUser(ctx, req.(*GetUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserManagement_GetUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserParam)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserManagementServer).GetUsers(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.UserManagement/GetUsers",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserManagementServer).GetUsers(ctx, req.(*GetUserParam))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _UserManagement_GetLastUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUserParam)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserManagementServer).GetLastUser(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.UserManagement/GetLastUser",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserManagementServer).GetLastUser(ctx, req.(*GetUserParam))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _UserManagement_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HelloMessage)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserManagementServer).SayHello(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.UserManagement/SayHello",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserManagementServer).SayHello(ctx, req.(*HelloMessage))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _UserManagement_SayHello2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HelloMessage2)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserManagementServer).SayHello2(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.UserManagement/SayHello2",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserManagementServer).SayHello2(ctx, req.(*HelloMessage2))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-// UserManagement_ServiceDesc is the grpc.ServiceDesc for UserManagement service.
+// UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var UserManagement_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.UserManagement",
-	HandlerType: (*UserManagementServer)(nil),
+var UserService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "proto.UserService",
+	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateNewUser",
-			Handler:    _UserManagement_CreateNewUser_Handler,
-		},
-		{
-			MethodName: "GetUsers",
-			Handler:    _UserManagement_GetUsers_Handler,
-		},
-		{
-			MethodName: "GetLastUser",
-			Handler:    _UserManagement_GetLastUser_Handler,
-		},
-		{
-			MethodName: "SayHello",
-			Handler:    _UserManagement_SayHello_Handler,
-		},
-		{
-			MethodName: "SayHello2",
-			Handler:    _UserManagement_SayHello2_Handler,
+			MethodName: "GetUser",
+			Handler:    _UserService_GetUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
