@@ -38,4 +38,15 @@ func main() {
 	}
 
 	fmt.Printf("%+v\n", res)
+
+	res2, err := client.GetClient(context.Background(), &userpb.GetClientRequest{
+		FirstName: "John",
+		LastName:  "Doe",
+	})
+
+	if err != nil {
+		log.Fatalf("fail to GetClient: %v", err)
+	}
+
+	fmt.Printf("%+v\n", res2)
 }

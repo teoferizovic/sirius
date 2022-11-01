@@ -7,6 +7,7 @@ option go_package = "github.com/teo/sirius;sirius";
 
 service UserService {
   rpc GetUser(GetUserRequest) returns (GetUserResponse) {};
+  rpc GetClient(GetClientRequest) returns (GetClientResponse) {};		
 }
 
 message GetUserRequest {
@@ -15,6 +16,15 @@ message GetUserRequest {
 
 message GetUserResponse {
   User user = 1;
+}
+
+message GetClientRequest {
+	string first_name = 1;
+	string last_name = 2;
+}
+
+message GetClientResponse {
+	string full_name = 1;
 }
 
 message User {
